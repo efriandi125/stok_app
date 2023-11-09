@@ -12,7 +12,8 @@ class Transaksi extends Model{
         'qty',
         'transaksi_date',
         'is_void',
-        'harga'
+        'harga',
+        'keterangan'
     ];
 }
 ?>

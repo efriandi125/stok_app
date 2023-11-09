@@ -49,6 +49,7 @@
                         <th>Customer</th>
                         <th>QTY Pesanan</th>
                         <th>Harga / QTY</th>
+                        <th>Keterangan</th>
                         @if (auth()->user()->level=='admin')
                         <th>Options</th>
                         @endif
@@ -60,6 +61,7 @@
                         <td>{{$tr->customer_nama}}</td>
                         <td>{{$tr->qty}}</td>
                         <td>{{$tr->harga}}</td>
+                        <td>{{$tr->keterangan}}</td>
                         @if (auth()->user()->level=='admin' and $tr->is_void==false )
                         <td> <a href="#" class="btn btn-danger" onClick="show({{$tr->id}})" id="VoidTR">Batal </a>
                         </td>

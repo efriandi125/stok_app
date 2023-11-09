@@ -15,7 +15,7 @@ class TransaksiController extends Controller
         $conv=(string)$code;
         if (empty($conv)){
             $transaksi = DB::table('transaksi')->join('produk','transaksi.id_produk','=','produk.id')->join('customer','transaksi.id_customer','=','customer.id')->
-            select('produk.nama_produk as produk_nama','customer.nama_customer as customer_nama','transaksi.qty','transaksi.transaksi_date','transaksi.is_void','transaksi.harga','transaksi.id')->paginate(5);
+            select('produk.nama_produk as produk_nama','customer.nama_customer as customer_nama','transaksi.qty','transaksi.transaksi_date','transaksi.is_void','transaksi.harga','transaksi.id','transaksi.keterangan')->paginate(5);
 
             return view('Transaksi.transaksi', ['data' => $transaksi]);
         }
@@ -43,7 +43,8 @@ class TransaksiController extends Controller
             'id_customer'=>$request->id_customer,
             'transaksi_date'=>date('
             Y-m-d H:m:s'),
-            'is_void'=>false
+            'is_void'=>false,
+            'keterangan'=>"OK"
         ]);
         return redirect()->route('transaksi')->with('success', 'Created Transaksi');
     }
@@ -53,6 +54,12 @@ class TransaksiController extends Controller
 
         $transaksi= Transaksi::findOrFail($id);
         $transaksi->is_void =$a;
+        if ($transaksi->is_void){
+            $transaksi->keterangan="Batal";
+        }
+        else{
+            $transaksi->keterangan="OK";
+        }
         $transaksi->update();
 
        
@@ -63,7 +70,7 @@ class TransaksiController extends Controller
         $to=$request->query('date_to');
         $from=$request->query('date_from');
         $transaksi = DB::table('transaksi')->join('produk','transaksi.id_produk','=','produk.id')->join('customer','transaksi.id_customer','=','customer.id')->
-        select('produk.nama_produk as produk_nama','customer.nama_customer as customer_nama','transaksi.qty','transaksi.transaksi_date','transaksi.is_void','transaksi.harga','transaksi.id')->whereBetween('transaksi.transaksi_date',[$from,$to])->paginate(5);;
+        select('produk.nama_produk as produk_nama','customer.nama_customer as customer_nama','transaksi.qty','transaksi.transaksi_date','transaksi.is_void','transaksi.harga','transaksi.id','transaksi.keterangan')->whereBetween('transaksi.transaksi_date',[$from,$to])->paginate(5);;
         return view('Transaksi.transaksi',['data'=>$transaksi]);
     }
 
